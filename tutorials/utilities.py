@@ -3,12 +3,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 def top(vector, maximum, k):
     c = maximum * np.argsort(scores)[-k:] + (1 - maximum) * np.argsort(scores)[:k]
     d = []
     for i in np.arange(len(c)):
         d.append(vector[c[i]])
     return d
+
 
 def rearrange(items, ratings):
     attribute, scores = [], []
@@ -20,6 +22,22 @@ def rearrange(items, ratings):
 
     return attribute, scores
 
+
+def rank_top_k(names, ratings):
+    """
+    Example:
+    a, b = np.array(['a', 'b', 'c']), np.array([6, 1, 3])
+    a, b = rearrange(a, b)
+    >>> a
+    np.array('b', 'c', 'a')
+    >>> b
+    np.array([1, 3, 6])
+    """
+
+    ranked_ids = np.argsort(ratings)
+    return names[ranked_ids], ratings[ranked_ids]
+
+
 def convert(data, nb_users, nb_movies):
     new_data = []
     for id_users in range(1, nb_users + 1):
@@ -30,11 +48,13 @@ def convert(data, nb_users, nb_movies):
         new_data.append(list(ratings))
     return new_data
 
+
 def inner_concatenation(a, b):
     c = []
     for k in np.arange(len(a)):
         c.append(a[k]+b[k])
     return c
+
 
 def transform(user_sex, user_age, user_occupation):
 
@@ -49,6 +69,7 @@ def transform(user_sex, user_age, user_occupation):
 
     return np.concatenate(([user_sex], [user_age], empty.T)).T.tolist()
 
+
 def descriptive(variable):
 
     if variable.describe().dtype == 'float64':
@@ -60,6 +81,7 @@ def descriptive(variable):
         stats = pd.DataFrame(np.matrix((variable.describe().freq / len(variable) * 100)))
         stats.columns = np.array(['Proportion'])
     return stats
+
 
 def barplot(attribute, scores, xlabel, ylabel, title, rotation):
 
@@ -76,6 +98,7 @@ def barplot(attribute, scores, xlabel, ylabel, title, rotation):
     plt.title(title)
 
     plt.show()
+
 
 def freq_analysis(names, frequency, recommendations):
 
